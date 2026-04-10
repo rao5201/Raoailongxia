@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raoailongxia AI龙虾项目 - v0.0.01</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        /* 页面主体样式 */
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* 头部导航栏 */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .project-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .version-tag {
+            background-color: #e74c3c;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        /* 主要内容区 */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .section-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+        .content-text {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .feature-list {
+            list-style: none;
+            margin-left: 1rem;
+        }
+        .feature-list li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .feature-list li::before {
+            content: "✓";
+            color: #27ae60;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        /* 页脚样式 */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部：项目名称 + 版本号 -->
+    <header>
+        <div class="header-container">
+            <div class="project-title">Raoailongxia AI龙虾项目</div>
+            <div class="version-tag">版本号：v0.0.01</div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main>
+        <!-- 项目介绍模块 -->
+        <section class="section">
+            <h2 class="section-title">项目简介</h2>
+            <p class="content-text">Raoailongxia AI龙虾项目（v0.0.01版本）是面向龙虾养殖/分析场景的AI辅助系统，旨在通过人工智能技术解决龙虾养殖过程中的数据监测、病害识别、产量预测等核心问题，降低养殖成本，提升养殖效率。</p>
+            <p class="content-text">当前v0.0.01版本为基础原型版本，聚焦核心功能的验证与落地，后续将持续迭代优化。</p>
+        </section>
+
+        <!-- 核心功能模块 -->
+        <section class="section">
+            <h2 class="section-title">v0.0.01 核心功能</h2>
+            <ul class="feature-list">
+                <li>龙虾养殖环境数据（水温/溶氧量）实时采集与可视化</li>
+                <li>基础龙虾病害图像识别（支持3类常见病害初步判定）</li>
+                <li>养殖数据简易统计报表生成</li>
+                <li>本地数据存储与基础导出功能</li>
+            </ul>
+        </section>
+
+        <!-- 版本说明模块 -->
+        <section class="section">
+            <h2 class="section-title">版本说明</h2>
+            <p class="content-text">v0.0.01 为项目首个原型版本，完成核心技术栈的搭建与基础功能验证：</p>
+            <ul class="feature-list">
+                <li>前端：HTML5 + CSS3 + JavaScript 原生开发，适配移动端/PC端基础布局</li>
+                <li>后端：暂未接入，v0.0.01版本为前端静态演示版</li>
+                <li>AI能力：集成轻量级图像识别模型（本地离线版）</li>
+                <li>待优化：病害识别准确率、数据同步、多端适配细节</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>Raoailongxia AI龙虾项目 © 2025 版权所有 | v0.0.01</p>
+    </footer>
+</body>
+</html>

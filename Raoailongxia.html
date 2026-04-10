@@ -1,0 +1,2424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jQuery仿蜜淘在线客服</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <style>
+        /* 基础变量与全局样式 */
+        :root {
+            --primary-color: #64ffda;
+            --secondary-color: #42b983;
+            --accent-color: #e63946;
+            --bg-main: #0a121f;
+            --bg-card: #172a45;
+            --bg-light: #112240;
+            --text-main: #e6f1ff;
+            --text-secondary: #8892b0;
+            --text-white: #fff;
+            --border-color: #233554;
+            --shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px clamp(10px, 5vw, 20px);
+            line-height: 1.8;
+            color: var(--text-main);
+            background-color: var(--bg-main);
+            overflow-x: hidden;
+            text-align: center;
+            padding-top: 3em;
+        }
+
+        /* 头部与品牌样式 */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .profile-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+            background-color: #eee;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(100, 255, 218, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(100, 255, 218, 0);
+            }
+        }
+
+        .username {
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--text-white);
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .bio {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .version {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--bg-main);
+            margin-top: 10px;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: clamp(24px, 5vw, 32px);
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: clamp(20px, 4vw, 24px);
+            margin: 40px 0 20px;
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 15px;
+        }
+
+        h3 {
+            font-size: clamp(17px, 3.5vw, 20px);
+            color: var(--text-white);
+            margin: 20px 0 15px;
+        }
+
+        /* 介绍文本 */
+        .intro {
+            font-size: clamp(16px, 3vw, 18px);
+            text-align: center;
+            margin: 20px 0 40px;
+            color: #ccd6f6;
+            padding: 20px;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        /* 功能卡片样式 */
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            padding: 30px 20px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid var(--primary-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(100, 255, 218, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-white);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* 技术特点 */
+        .tech-features {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .tech-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateX(5px);
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .tech-icon {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        /* 下载区域 */
+        .download-section {
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-light));
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--bg-main);
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            margin: 20px 10px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+        }
+
+        /* 动态背景 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(66, 185, 131, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(230, 57, 70, 0.05) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(2%, 2%) scale(1.02);
+            }
+            50% {
+                transform: translate(0, 2%) scale(1);
+            }
+            75% {
+                transform: translate(2%, 0) scale(0.98);
+            }
+        }
+
+        /* 进度条 */
+        .progress-section {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-bg {
+            background-color: var(--border-color);
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            text-align: right;
+            padding-right: 10px;
+            color: white;
+            font-size: 12px;
+            line-height: 20px;
+            min-width: 2%;
+            transition: width 1s ease-in-out;
+        }
+
+        /* 底部样式 */
+        .back-home {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .back-home a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.3s ease;
+        }
+
+        .back-home a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-note {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            .profile-card {
+                padding: 30px 20px;
+            }
+            
+            .features-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-section {
+                padding: 30px 20px;
+            }
+            
+            .download-btn {
+                display: block;
+                margin: 10px auto;
+                width: 80%;
+            }
+        }
+
+        /* 广告位样式 */
+        .ad {
+            background: #fff;
+            overflow: hidden;
+            clear: both;
+            border-radius: 6px;
+        }
+        .ad a {
+            margin: 5px;
+            display: block;
+            border-radius: 3px;
+        }
+        .ad img {
+            max-width: 100%;
+        }
+        .txtguanggao {
+            width: 100%;
+            overflow: hidden;
+            display: block;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+        }
+        .txtguanggao a {
+            width: calc((100% - 20px) / 4);
+            float: left;
+            border-radius: 2px;
+            line-height: 35.35px;
+            height: 35.35px;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            display: inline-block;
+            background-color: rgb(255, 153, 159);
+            margin: 2.5px;
+            transition-duration: .3s;
+            text-decoration: none;
+        }
+        .txtguanggao a:hover {
+            background: #FF2805;
+            color: #FFF;
+        }
+        @media screen and (max-width: 1000px) {
+            .txtguanggao a {
+                width: calc((100% - 10px) / 2);
+            }
+        }
+        @media screen and (min-width: 1000px) {
+            .txtguanggao a {
+                width: calc((100% - 20px) / 4);
+            }
+        }
+        
+        /* 在线客服样式 */
+        body {
+            font-family: "Helvetica Neue",Helvetica,"Microsoft YaHei",STHeiti,SimHei,Arial,sans-serif;
+            font-size: 12px;
+        }
+        a {
+            color: #545454;
+            cursor: pointer;
+            text-decoration: none !important;
+        }
+        .sidebar_fixed {
+            display: none;
+            height: 352px;
+            position: fixed;
+            visibility: visible;
+            width: 106px;
+        }
+        .sidebar_block {
+            background: url("http://beilouweb.b0.upaiyun.com/public/images/pc/pc_dt.png") no-repeat scroll -1115px -828px;
+            height: 352px;
+            left: 50%;
+            margin-left: 501px;
+            z-index: 3;
+        }
+        .sidebar_unfixed {
+            position: absolute;
+            visibility: visible;
+            width: 106px;
+        }
+        .sidebar_block img {
+            bottom: 236px;
+            left: 11px;
+            position: absolute;
+        }
+        .sidebar_block .gw {
+            background-color: #fff;
+            border-radius: 2px;
+            bottom: 196px;
+            color: #333;
+            margin: 0 10px;
+            position: absolute;
+            text-align: center;
+            width: 85px;
+        }
+        .sidebar_block .zxkf {
+            bottom: 87px;
+            cursor: pointer;
+            height: 43px;
+            left: 5px;
+            position: absolute;
+            width: 96px;
+        }
+        .sidebar_block .zxkf img {
+            bottom: 0;
+            display: block;
+            left: 0;
+        }
+        .sidebar_block .gw span {
+            background: url("http://beilouweb.b0.upaiyun.com/public/images/pc/pc_dt.png") no-repeat scroll -945px -1205px;
+            padding-left: 22px;
+            padding-top: 4px;
+        }
+        #back-to-top {
+            display: none;
+            left: 50%;
+            margin-left: 530px;
+            position: fixed;
+            z-index: 201;
+        }
+        #back-to-top a {
+            color: #d1d1d1;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            transition: color 1s ease 0s;
+            width: 48px;
+        }
+        #back-to-top a span {
+            background: #f2f2f2 url("http://beilouweb.b0.upaiyun.com/public/images/pc/pc_dt.png") no-repeat scroll -210px -262px;
+            border-radius: 6px;
+            display: block;
+            height: 48px;
+            margin-bottom: 5px;
+            text-indent: -999em;
+            transition: background 1s ease 0s;
+            width: 47px;
+        }
+        .carousel {
+            height: 400px;
+        }
+    </style>
+</head>
+<body style="height:3000px">
+        <div  style="text-align: center;margin:120px 0 0;color:red;font-size: 16px;">提示：滚动条往下拉，右侧会出现在线客服悬浮层</div>
+        <div class="sidebar_fixed sidebar_block fixed" style="top: 70px;">
+            <img src="http://beilouweb.b0.upaiyun.com/public/images/pc/khd_qr_x.png">
+                <div class="gw"><a target="_blank" href="#"><span>关注我们</span></a> </div>
+                <div id="zxkf_div" class="zxkf">
+                    <!-- Live800在线客服图标:蜜淘客服[固定图标] 开始-->
+                    <div ><a href="#">在线客服系统</a></div>
+
+                    <a href="#" target="_blank" id="live800iconlink">
+                        <img border="0" src="http://v2.live800.com/live800/SurferServer?cmd=111&amp;companyID=457931&amp;configID=124644&amp;online=https://icon.live800.com/fileupload/CustomFileDownloadServer?companyID=457931&amp;fna=1428726437959457931&amp;offline=https://icon.live800.com/fileupload/CustomFileDownloadServer?companyID=457931&amp;fna=1428745327541457931" id="live800icon" name="live800icon"></a>
+                </div>
+                <!-- 在线客服图标:蜜淘客服 结束-->
+        </div>
+        <p id="back-to-top" class="fixed" style="top: 352px;">
+            <a href="#top">
+                <span></span>
+            </a>
+        </p>
+    <!-- 动态背景 -->
+    <div class="bg-animation"></div>
+
+    <!-- 个人资料卡片 -->
+    <div class="profile-card">
+        <img src="QR code捐赠渠道0.ico" alt="AI龙虾" class="avatar">
+        <h1 class="username">AI龙虾</h1>
+        <p class="bio">智能科技 · 创新未来</p>
+        <p class="bio">Raoailongxia - 让AI触手可及</p>
+        <div class="version">v0.0.01</div>
+    </div>
+
+    <!-- 介绍 -->
+    <div class="intro">
+        AI龙虾是一款革命性的人工智能软件，结合了最新的AI技术与用户友好的界面，为用户提供智能、高效的解决方案。
+        我们致力于将复杂的AI技术简化为人人可用的工具，开启智能时代的新篇章。
+    </div>
+
+    <!-- 功能特性 -->
+    <h2>🚀 核心功能</h2>
+    <div class="features-container">
+        <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <div class="feature-title">智能对话</div>
+            <div class="feature-desc">基于先进的语言模型，提供自然、流畅的对话体验，解答问题、生成内容、提供建议。</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🖼️</div>
+            <div class="feature-title">图像生成</div>
+            <div class="feature-desc">根据描述生成高质量图像，支持多种风格和场景，满足创意需求。</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <div class="feature-title">内容创作</div>
+            <div class="feature-desc">自动生成文章、报告、邮件等各种文本内容，提高工作效率。</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">智能分析</div>
+            <div class="feature-desc">对数据进行深度分析，提供有价值的见解和预测。</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <div class="feature-title">自定义功能</div>
+            <div class="feature-desc">支持用户自定义AI模型和功能，适应不同场景的需求。</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">高效处理</div>
+            <div class="feature-desc">优化的算法和架构，确保快速响应和处理能力。</div>
+        </div>
+    </div>
+
+    <!-- 技术特点 -->
+    <div class="tech-features">
+        <h2>🛠️ 技术特点</h2>
+        <div class="tech-list">
+            <div class="tech-item">
+                <div class="tech-icon">🚀</div>
+                <span>先进的AI模型</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🔒</div>
+                <span>数据安全保障</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">⚡</div>
+                <span>高性能计算</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">📱</div>
+                <span>多平台支持</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🔄</div>
+                <span>实时更新</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon">🤝</div>
+                <span>易于集成</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 开发进度 -->
+    <h2>📊 开发进度</h2>
+    <div class="progress-section">
+        <div class="progress-title">
+            <span>核心功能开发</span>
+            <span>85%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 85%;">85%</div>
+        </div>
+        
+        <div class="progress-title">
+            <span>用户界面设计</span>
+            <span>78%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 70%;">70%</div>
+        </div>
+        
+        <div class="progress-title">
+            <span>性能优化</span>
+            <span>75%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 55%;">55%</div>
+        </div>
+        
+        <div class="progress-title">
+            <span>测试与调试</span>
+            <span>60%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: 10%;">10%</div>
+        </div>
+    </div>
+
+    <!-- 项目融资与发展计划 -->
+    <div class="card" style="margin-top: 40px;">
+        <h2>📌 项目融资与发展计划</h2>
+        <div style="margin-top: 20px;">
+            <strong>资金用途：</strong>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>服务器、域名、SSL、带宽成本</li>
+                <li>AI 模型训练、功能升级、安全防护</li>
+                <li>客户服务、技术支持、系统维护</li>
+                <li>产品迭代、移动端开发、生态扩展</li>
+            </ul>
+            <p style="margin-top: 20px; line-height: 1.8;">
+                所有资金 100% 用于研发与稳定运行，致力于打造更安全、智能的服务。
+            </p>
+            <p style="margin-top: 20px; font-weight: bold; color: var(--primary-color);">
+                感谢每一位用户的支持与陪伴！
+            </p>
+        </div>
+    </div>
+
+    <!-- 项目简介与版本说明 -->
+    <div class="section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 class="section-title" style="font-size: clamp(20px, 4vw, 24px); color: var(--primary-color); margin-bottom: 20px; border-left: 4px solid var(--secondary-color); padding-left: 15px;">项目简介</h2>
+        <p class="content-text" style="margin-bottom: 20px; color: var(--text-main);">Raoailongxia AI龙虾项目（v0.0.01版本）是面向龙虾养殖/分析场景的AI辅助系统，旨在通过人工智能技术解决龙虾养殖过程中的数据监测、病害识别、产量预测等核心问题，降低养殖成本，提升养殖效率。</p>
+        <p class="content-text" style="margin-bottom: 20px; color: var(--text-main);">当前v0.0.01版本为基础原型版本，聚焦核心功能的验证与落地，后续将持续迭代优化。</p>
+    </div>
+
+    <div class="section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 class="section-title" style="font-size: clamp(20px, 4vw, 24px); color: var(--primary-color); margin-bottom: 20px; border-left: 4px solid var(--secondary-color); padding-left: 15px;">v0.0.01 核心功能</h2>
+        <ul class="feature-list" style="list-style: none; margin-left: 1rem;">
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 龙虾养殖环境数据（水温/溶氧量）实时采集与可视化</li>
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 基础龙虾病害图像识别（支持3类常见病害初步判定）</li>
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 养殖数据简易统计报表生成</li>
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 本地数据存储与基础导出功能</li>
+        </ul>
+    </div>
+
+    <div class="section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 class="section-title" style="font-size: clamp(20px, 4vw, 24px); color: var(--primary-color); margin-bottom: 20px; border-left: 4px solid var(--secondary-color); padding-left: 15px;">版本说明</h2>
+        <p class="content-text" style="margin-bottom: 20px; color: var(--text-main);">v0.0.01 为项目首个原型版本，完成核心技术栈的搭建与基础功能验证：</p>
+        <ul class="feature-list" style="list-style: none; margin-left: 1rem;">
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 前端：HTML5 + CSS3 + JavaScript 原生开发，适配移动端/PC端基础布局</li>
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 后端：暂未接入，v0.0.01版本为前端静态演示版</li>
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> AI能力：集成轻量级图像识别模型（本地离线版）</li>
+            <li style="margin-bottom: 15px; padding-left: 1.5rem; position: relative; color: var(--text-main);"><span style="content: '✓'; color: var(--secondary-color); position: absolute; left: 0; font-weight: bold;">✓</span> 待优化：病害识别准确率、数据同步、多端适配细节</li>
+        </ul>
+    </div>
+
+    <!-- 赞助支持 -->
+    <div class="section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 style="font-size: clamp(24px, 5vw, 32px); margin-bottom: 20px; color: var(--primary-color); text-align: center; font-weight: 600;">❤️ 赞助 AI龙虾 项目</h2>
+        <p class="intro" style="font-size: clamp(16px, 3vw, 18px); text-align: center; margin: 20px 0 40px; color: #ccd6f6; padding: 20px; background-color: var(--bg-light); border-radius: 12px;">AI龙虾项目是纯公益开源项目。您的赞助将帮助我们维持服务器、域名和 CDN 运营，持续为社区提供免费服务。</p>
+
+        <h3 style="font-size: clamp(20px, 4vw, 24px); margin: 40px 0 20px; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">选择赞助等级</h3>
+        <div class="sponsor-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 30px 0; padding: 0 10px;">
+            <div class="sponsor-level" style="padding: 25px 20px; border-radius: 12px; background: var(--bg-light); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-white);"><span>☕</span>咖啡支持者</h3>
+                <div class="price" style="font-size: clamp(19px, 4.5vw, 24px); font-weight: 700; color: var(--secondary-color); margin: 12px 0;">¥10/月</div>
+                <p style="color: var(--text-secondary);">首页致谢名单</p>
+                <a href="#payment" class="donate-btn" style="display: inline-block; padding: clamp(10px, 3vw, 13px) 0; background-color: var(--secondary-color); color: var(--text-white); border: none; border-radius: 8px; font-size: clamp(14px, 3vw, 16px); font-weight: 600; cursor: pointer; transition: background 0.3s; text-align: center; text-decoration: none; touch-action: manipulation; width: 100%; margin-top: 20px;">立即赞助</a>
+            </div>
+            <div class="sponsor-level" style="padding: 25px 20px; border-radius: 12px; background: var(--bg-light); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-white);"><span>🥈</span>银牌赞助商 <span class="tag" style="display: inline-block; background: var(--secondary-color); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 60px;">推荐</span></h3>
+                <div class="price" style="font-size: clamp(19px, 4.5vw, 24px); font-weight: 700; color: var(--secondary-color); margin: 12px 0;">¥100/月</div>
+                <p style="color: var(--text-secondary);">首页小Logo</p>
+                <a href="#payment" class="donate-btn" style="display: inline-block; padding: clamp(10px, 3vw, 13px) 0; background-color: var(--secondary-color); color: var(--text-white); border: none; border-radius: 8px; font-size: clamp(14px, 3vw, 16px); font-weight: 600; cursor: pointer; transition: background 0.3s; text-align: center; text-decoration: none; touch-action: manipulation; width: 100%; margin-top: 20px;">立即赞助</a>
+            </div>
+            <div class="sponsor-level" style="padding: 25px 20px; border-radius: 12px; background: var(--bg-light); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden;">
+                <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--text-white);"><span>🥇</span>金牌赞助商</h3>
+                <div class="price" style="font-size: clamp(19px, 4.5vw, 24px); font-weight: 700; color: var(--secondary-color); margin: 12px 0;">¥500/月</div>
+                <p style="color: var(--text-secondary);">首页大Logo、优先支持</p>
+                <a href="#payment" class="donate-btn" style="display: inline-block; padding: clamp(10px, 3vw, 13px) 0; background-color: var(--secondary-color); color: var(--text-white); border: none; border-radius: 8px; font-size: clamp(14px, 3vw, 16px); font-weight: 600; cursor: pointer; transition: background 0.3s; text-align: center; text-decoration: none; touch-action: manipulation; width: 100%; margin-top: 20px;">立即赞助</a>
+            </div>
+        </div>
+
+        <div class="one-time-donate" style="text-align: center; margin-top: 30px;">
+            <a href="#payment" class="donate-btn" style="display: inline-block; padding: 12px 30px; background-color: var(--secondary-color); color: var(--text-white); border: none; border-radius: 8px; font-size: clamp(14px, 3vw, 16px); font-weight: 600; cursor: pointer; transition: background 0.3s; text-align: center; text-decoration: none; touch-action: manipulation; width: auto;">任意金额 · 一次性捐赠</a>
+        </div>
+
+        <h3 id="payment" style="font-size: clamp(20px, 4vw, 24px); margin: 40px 0 20px; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">💳 捐赠支付渠道</h3>
+        <div class="payment-channels" style="margin: 20px 0; padding: 25px; background-color: var(--bg-light); border-radius: 12px;">
+            <p style="color: var(--text-main);">请选择支付渠道捐赠，完成后可联系社区确认权益</p>
+            <div class="payment-container" style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 20px;">
+                <div class="payment-item" style="text-align: center; width: clamp(100px, 25vw, 130px);">
+                    <div class="payment-icon wechat" style="font-size: clamp(32px, 8vw, 44px); margin-bottom: 8px; color: #07c160;">📱</div>
+                         <img src="QR code微信.ico" alt="支付渠道" class="project-image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: transform 0.3s ease, box-shadow 0.3s ease; display: block;">
+                    <p style="color: var(--text-main);">微信支付</p> 
+                    <small style="color: var(--text-secondary);">扫码捐赠</small>
+                </div>
+                <div class="payment-item" style="text-align: center; width: clamp(100px, 25vw, 130px);">
+                    <div class="payment-icon alipay" style="font-size: clamp(32px, 8vw, 44px); margin-bottom: 8px; color: #1677ff;">💳</div>
+                         <img src="QR code支付宝.ico" alt="支付渠道" class="project-image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: transform 0.3s ease, box-shadow 0.3s ease; display: block;">
+                    <p style="color: var(--text-main);">支付宝</p>
+                    <small style="color: var(--text-secondary);">扫码捐赠</small>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="font-size: clamp(20px, 4vw, 24px); margin: 40px 0 20px; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">📊 透明运营</h3>
+        <div class="cost-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+            <div class="cost-item" style="padding: 15px; background-color: var(--bg-light); border-radius: 8px; display: flex; align-items: center; gap: 10px; color: var(--text-main);"><span>🖥️</span>服务器：Cloudflare Workers</div>
+            <div class="cost-item" style="padding: 15px; background-color: var(--bg-light); border-radius: 8px; display: flex; align-items: center; gap: 10px; color: var(--text-main);"><span>🌐</span>域名：openclaw-cn 网站域名</div>
+            <div class="cost-item" style="padding: 15px; background-color: var(--bg-light); border-radius: 8px; display: flex; align-items: center; gap: 10px; color: var(--text-main);"><span>⚡</span>CDN 静态资源加速</div>
+            <div class="cost-item" style="padding: 15px; background-color: var(--bg-light); border-radius: 8px; display: flex; align-items: center; gap: 10px; color: var(--text-main);"><span>👨‍💻</span>文档翻译与社区维护</div>
+        </div>
+        <p style="color:#ccd6f6;margin-bottom:40px;text-align:center;">所有赞助资金 100% 用于项目运营。</p>
+    </div>
+
+    <!-- 文章列表与预览 -->
+    <div class="posts-section" style="margin-top: 30px;">
+        <h3 style="margin-bottom: 15px; font-size: clamp(17px, 3.5vw, 20px); color: var(--text-white);">📁 全部文件（全能预览）</h3>
+        <div id="posts-list"></div>
+        <div id="article-content" class="article-content" style="background: var(--bg-card); padding: 25px; border-radius: 12px; margin-top: 20px; white-space: pre-wrap; line-height: 1.9; font-size: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); display: none; max-width: 100%; overflow-x: auto;"></div>
+    </div>
+
+    <!-- 项目展示 -->
+    <div class="project-showcase" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 30px 0; box-shadow: var(--shadow); text-align: center; border-top: 4px solid var(--primary-color);">
+        <div class="project-title" style="font-size: 22px; font-weight: bold; margin-bottom: 15px; color: var(--text-white);">🦀 OpenClaw 实战分享</div>
+        <p class="project-desc" style="font-size: 16px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.8;">
+            这是我最新的技术分享项目！涵盖从基础到进阶的实战案例，带你深入理解爬虫技术与数据处理。
+            点击下方按钮查看详细内容或获取源码。
+        </p>
+        <div class="project-image-container" style="margin: 20px 0; position: relative; display: inline-block;">
+            <img src="QR code捐赠渠道0.ico" alt="OpenClaw 实战分享封面" class="project-image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: transform 0.3s ease, box-shadow 0.3s ease; display: block;">
+        </div>
+        <a href="#" class="project-btn" style="background-color: var(--bg-light); color: var(--text-white); padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: bold; transition: background 0.3s; display: inline-block; margin-top: 15px;">查看详情 / 获取源码</a>
+    </div>
+
+    <!-- 加密信息区域 -->
+    <div class="secret-section" style="margin-top: 40px; background-color: #2c3e50; color: #00ff00; padding: 25px; border-radius: 12px; font-family: 'Courier New', Courier, monospace; box-shadow: var(--shadow); border: 1px solid #444;">
+        <div class="secret-title" style="font-size: 18px; font-weight: bold; border-bottom: 1px dashed #666; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">🔒 加密信息：收取小费通道</div>
+        <input type="text" class="decrypt-input" id="decrypt-key" placeholder="输入解密密钥（赞助后获取）" style="margin: 15px 0; padding: 8px; border: 1px solid #444; background: #34495e; color: #00ff00; border-radius: 4px; width: 100%; box-sizing: border-box;">
+        <button class="decrypt-btn" onclick="decryptSecret()" style="background: #00ff00; color: #2c3e50; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px;">解密信息</button>
+        <div class="secret-content">
+            <div class="secret-line" style="margin: 10px 0; font-size: 14px; word-break: break-all;">
+                <span class="secret-label" style="color: #aaa; margin-right: 10px;">银行账号:</span>
+                <span id="bank-account">？？？？？？？？？*****</span>
+            </div>
+            <div class="secret-line" style="margin: 10px 0; font-size: 14px; word-break: break-all;">
+                <span class="secret-label" style="color: #aaa; margin-right: 10px;">银行名称:</span>
+                <span id="bank-name">~！~！~！~！</span>
+            </div>
+            <div class="secret-line" style="margin: 10px 0; font-size: 14px; word-break: break-all;">
+                <span class="secret-label" style="color: #aaa; margin-right: 10px;">支行名称:</span>
+                <span id="bank-branch">~！~！~！~</span>
+            </div>
+            <div class="secret-line" style="margin: 10px 0; font-size: 14px; word-break: break-all;">
+                <span class="secret-label" style="color: #aaa; margin-right: 10px;">账号姓名:</span>
+                <span id="bank-username">！~！~！~！</span>
+            </div>
+        </div>
+        <div style="margin-top: 15px; font-size: 12px; color: #666;">
+            * 请联系站长获取解密钥匙或直接通过上方按钮赞助。
+        </div>
+    </div>
+
+    <!-- 短篇小说&美文配图区域 -->
+    <div class="literature-section" style="margin: 60px 0 40px; background: var(--bg-card); border-radius: 12px; padding: 30px; box-shadow: var(--shadow);">
+        <h2 class="literature-title" style="font-size: clamp(20px, 4vw, 24px); color: var(--primary-color); text-align: center; margin-bottom: 25px; font-weight: 600;">📖 个人创作 · 短篇小说 & 美文配图</h2>
+        
+        <!-- 短篇小说列表 -->
+        <div class="story-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 30px;">
+            <div class="story-card" style="background: var(--bg-light); border-radius: 8px; padding: 20px; transition: transform 0.3s ease;">
+                <h4 style="color: var(--text-white); font-size: 18px; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">《晚风与归途》</h4>
+                <div class="story-excerpt" style="color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
+                    城市的霓虹漫过街角的梧桐，他裹紧了外套，脚步踩碎地上的落叶。加班后的归途总是漫长，直到巷口那家亮着暖灯的小店，一碗热汤，便融化了所有疲惫。原来人间的温柔，从来都藏在这些细碎的瞬间里。
+                </div>
+                <a href="#" class="read-more" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-size: 14px; font-weight: 500; padding: 5px 10px; border: 1px solid var(--primary-color); border-radius: 4px; transition: background 0.3s ease;">阅读全文</a>
+            </div>
+            <div class="story-card" style="background: var(--bg-light); border-radius: 8px; padding: 20px; transition: transform 0.3s ease;">
+                <h4 style="color: var(--text-white); font-size: 18px; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">《山海来信》</h4>
+                <div class="story-excerpt" style="color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
+                    她在海边捡到一封没有地址的信，字迹潦草却温柔，写着对远方的思念。后来才知道，那是一位老人写给逝去妻子的信，投进大海，让海风带去思念。山海可隔，爱意难阻。
+                </div>
+                <a href="#" class="read-more" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-size: 14px; font-weight: 500; padding: 5px 10px; border: 1px solid var(--primary-color); border-radius: 4px; transition: background 0.3s ease;">阅读全文</a>
+            </div>
+            <div class="story-card" style="background: var(--bg-light); border-radius: 8px; padding: 20px; transition: transform 0.3s ease;">
+                <h4 style="color: var(--text-white); font-size: 18px; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">《代码与诗》</h4>
+                <div class="story-excerpt" style="color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
+                    他是程序员，却偏爱在深夜写几行小诗。有人问，冰冷的代码和柔软的诗怎么共存？他说，代码是解决世界的逻辑，而诗，是拥抱世界的温柔。
+                </div>
+                <a href="#" class="read-more" style="display: inline-block; color: var(--primary-color); text-decoration: none; font-size: 14px; font-weight: 500; padding: 5px 10px; border: 1px solid var(--primary-color); border-radius: 4px; transition: background 0.3s ease;">阅读全文</a>
+            </div>
+        </div>
+
+        <!-- 美文/美女配图画廊 -->
+        <h3 style="text-align:center;margin:30px 0 20px;color:var(--text-white);">🖼️ 美文配图 · 光影瞬间</h3>
+        <div class="beauty-gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 30px;">
+            <div class="beauty-item" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <img src="https://picsum.photos/seed/beauty1/600/400" alt="美文配图1" style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                <div class="beauty-desc" style="padding: 10px; background: var(--bg-light); color: var(--text-secondary); font-size: 12px; text-align: center;">《晚风》- 温柔的街景</div>
+            </div>
+            <div class="beauty-item" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <img src="https://picsum.photos/seed/beauty2/600/400" alt="美文配图2" style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                <div class="beauty-desc" style="padding: 10px; background: var(--bg-light); color: var(--text-secondary); font-size: 12px; text-align: center;">《山海》- 海边的黄昏</div>
+            </div>
+            <div class="beauty-item" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <img src="https://picsum.photos/seed/beauty3/600/400" alt="美文配图3" style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                <div class="beauty-desc" style="padding: 10px; background: var(--bg-light); color: var(--text-secondary); font-size: 12px; text-align: center;">《代码与诗》- 深夜的书房</div>
+            </div>
+            <div class="beauty-item" style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <img src="https://picsum.photos/seed/beauty4/600/400" alt="美文配图4" style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+                <div class="beauty-desc" style="padding: 10px; background: var(--bg-light); color: var(--text-secondary); font-size: 12px; text-align: center;">《归途》- 巷口的暖灯</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI龙虾 · 茶海虾王 广告语 -->
+    <div class="shrimp-footer-slogan" style="background: var(--bg-card); padding: 20px; border-radius: 12px; text-align: center; margin-top: 30px; font-weight: bold; color: #fff; font-size: 16px; line-height: 2.2;">
+        🦞 AI龙虾我来养，茶海出品必虾王<br>
+        🤖 AI养龙虾，茶海出虾王 | 科技养虾王，茶海更强壮<br>
+        💪 智能AI龙虾，茶海虾王称霸 | 我养茶海虾王，AI保驾护航<br>
+        ☕ 咖啡助力，茶海虾王更霸气 | AI赋能，虾王封神
+    </div>
+
+    <!-- OpenClaw国内版 完整介绍 -->
+    <div class="openclaw-intro" style="background: var(--bg-card); padding: 40px 30px; border-radius: 12px; margin-top: 30px; line-height: 2; font-size: 15px; color: var(--text-main);">
+        <h2 style="text-align: center; margin-bottom: 20px; border-left: none; color: var(--primary-color); font-size: clamp(20px, 4vw, 24px);">🦞 OpenClaw国内版 - EasyClaw</h2>
+        <p><strong style="color: #fff;">零部署，开箱即用</strong><br>
+        零配置，无需API Key。连接 飞书 / 钉钉 / 企微，<br>
+        用聊天就能指挥的AI电脑，新时代的数字员工。</p>
+
+        <p>🎁 注册即送积分<br>
+        🎯 100+ 技能即装即用<br>
+        ⏰ 7×24 永不休息<br>
+        🔒 数据完全私有</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">🦞 它能做什么</p>
+        <p>四项人所不及的能力<br>
+        不只是聊天机器人——它是你随时在线的AI数字员工</p>
+
+        <p>💻 人用电脑能干的，它都能干<br>
+        写文章、发邮件、做表格、管社媒、搜资料、订机票——你说一句话，它自动完成。<br>
+        📌 真实案例：4分钟给611人发了个性化拜年，每条都不一样，0失败。</p>
+
+        <p>⏰ 人要休息，它不休息<br>
+        凌晨三点发消息，秒回。出差路上一句话，活儿就干完了。7×24自动运转。<br>
+        📌 真实案例：14天产出40+技能、20+定时任务，7×24自动运转。</p>
+
+        <p>🧬 越用越聪明，越来越懂你<br>
+        教它你的风格、偏好、工作流。用得越多，越像你的分身。犯过的错不会再犯。<br>
+        📌 真实案例：扔篇文章，22分钟自己找代码、安装、配置、跑通。</p>
+
+        <p>👥 一个能变一支团队<br>
+        总指挥+笔杆子+参谋+运营官，各司其职。Agent之间知识传递成本为零。<br>
+        📌 真实案例：第14天自己设计了8人团队架构，各司其职。</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">⚡ 工作流程</p>
+        <p>说句话，龙虾就开始干活<br>
+        💡 描述想法 → 🦞 龙虾执行 → 🚀 即时交付 → 💬 反馈训练 → 🧬 持续进化</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">🔍 区别在哪</p>
+        <p>不只是聊天，是你的数字员工<br>
+        对比维度	普通AI聊天	🦞 EasyClaw<br>
+        本质	聊天窗口	私人AI助手 + 数字员工<br>
+        记忆	每次对话都从零开始	记住你的一切偏好<br>
+        技能	只能聊天	40+ 技能，可操作电脑<br>
+        工作模式	你问它答	主动执行、定时任务、7×24<br>
+        数据安全	数据存服务商	跑在你自己电脑上<br>
+        扩展性	平台限制	开源，自由定制</p>
+
+        <p>🦞 傅盛亲自调教 14 天，打造的 AI 龙虾"三万"——现在你也能拥有同款<br>
+        ✦ 一键领取同款技能包</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">🧩 技能商店</p>
+        <p>装什么技能，就变成什么员工<br>
+        你的龙虾，由你定义。一键安装，即刻上岗。</p>
+
+        <p>💼 超级助理：邮件、日程、搜索、文档——白领最需要的全能助手。6 个技能<br>
+        ✍️ 内容创作者：公众号、小红书、视频、音乐——全平台内容一条龙。8 个技能<br>
+        📈 股票分析师：实时盯盘、技术分析、买卖信号——7×24帮你盯盘。7 个技能<br>
+        🌏 出海运营官：多语言翻译、海外社媒、跨境运营——搞定语言和时差。6 个技能<br>
+        💻 开发助手：写代码、管GitHub、控制浏览器——技术活全包。5 个技能<br>
+        🦞 傅盛同款 · 一人团队：完整复制傅盛亲自调教的「龙虾三万」配置，8个Agent各司其职。38 个技能</p>
+
+        <p>🦞 立即领用<br>
+        更多技能： 5000+ 社区技能 (Claw123.ai) →</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">🔧 精选技能</p>
+        <p>每一个技能，都是一项超能力<br>
+        🌐 网页搜索｜🔬 深度研究｜📧 邮件管理｜📅 飞书日历｜🖼️ AI图片生成｜🎙️ 语音合成｜<br>
+        💻 代码助手｜📕 小红书运营｜📈 股票监控｜🔥 今日热榜｜🎬 AI视频制作｜🚄 火车票查询｜<br>
+        ✈️ 机票查询｜🧑 AI文本人性化｜🐦 Twitter / X｜📊 工作汇报｜🧬 自我进化｜🧩 5000+更多 → Claw123.ai 社区技能</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">🐣 快速上手</p>
+        <p>3步领养，30秒上手<br>
+        会聊天，就会养龙虾。</p>
+
+        <p>1 下载安装 EasyClaw：约30秒，一键安装，支持全平台，零配置开箱即用。<br>
+        2 连接你的聊天工具：约1分钟，飞书、钉钉、QQ直接对话。<br>
+        3 开始对话，养成你的龙虾！完成！</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">🎁 注册送积分</p>
+        <p>💻 个人电脑版：注册即送积分 · 开源透明<br>
+        ✅ 一键安装，零配置<br>
+        ✅ 数据完全私有<br>
+        ✅ 与本地文件深度联动<br>
+        ✅ 开源透明，自由定制<br>
+        ✅ 40+ 技能即装即用<br>
+        ✅ 注册送积分，即刻可用</p>
+
+        <p>🦞 立即下载，注册领积分｜支持 Windows · macOS · Linux</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">✨ 核心优势</p>
+        <p>☁️ 7×24 在线｜🔒 数据私有｜🧬 越用越聪明｜📱 多平台接入</p>
+
+        <p class="section-title" style="font-size: 18px; font-weight: bold; color: var(--primary-color); margin: 30px 0 10px;">❓ 常见问题</p>
+        <p>注册送的积分怎么用？<br>
+        和 ChatGPT / 豆包 / Kimi 有什么区别？<br>
+        需要什么样的电脑？<br>
+        数据安全吗？<br>
+        技能需要额外付费吗？<br>
+        怎么给龙虾装新技能？<br>
+        支持哪些聊天工具？<br>
+        EasyClaw 和 OpenClaw 是什么关系？</p>
+    </div>
+
+    <!-- 下载区域 -->
+    <div class="download-section">
+        <h2>💾 下载体验</h2>
+        <p>立即下载AI龙虾，体验智能科技的魅力！</p>
+        <a href="#" class="download-btn">📥 下载 Windows 版本</a>
+        <a href="#" class="download-btn">📥 下载 Mac 版本</a>
+        <a href="#" class="download-btn">📥 下载 Linux 版本</a>
+    </div>
+
+    <!-- 首页致谢名单 -->
+    <div class="sponsor-section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 style="font-size: clamp(20px, 4vw, 24px); margin: 20px 0; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">🏆 首页致谢名单</h2>
+        <div class="thanks-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-top: 20px;">
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者01</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者02</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者03</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者04</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者05</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者06</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者07</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者08</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者09</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者10</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者11</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者12</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者13</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者14</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者15</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者16</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者17</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+            <div class="thanks-item" style="text-align: center; padding: 10px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease;">
+                <div style="font-weight: bold; color: var(--text-white);">支持者18</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">咖啡支持者</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页小Logo -->
+    <div class="sponsor-section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 style="font-size: clamp(20px, 4vw, 24px); margin: 20px 0; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">🥈 首页小Logo赞助商</h2>
+        <div class="small-logo-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-top: 20px;">
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo01</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo02</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo03</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo04</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo05</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo06</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo07</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo08</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo09</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo10</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo11</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo12</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo13</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo14</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo15</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo16</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo17</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo18</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo19</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo20</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo21</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo22</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo23</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo24</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo25</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo26</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo27</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo28</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo29</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo30</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo31</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo32</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo33</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo34</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo35</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo36</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo37</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo38</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo39</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo40</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo41</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo42</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo43</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo44</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo45</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo46</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo47</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo48</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo49</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo50</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo51</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo52</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo53</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo54</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo55</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo56</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo57</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo58</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo59</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+            <div class="logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white);">Logo60</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">银牌赞助商</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 首页大Logo -->
+    <div class="sponsor-section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 style="font-size: clamp(20px, 4vw, 24px); margin: 20px 0; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">🥇 首页大Logo赞助商</h2>
+        <div class="big-logo-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-top: 20px;">
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo01</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo02</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo03</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo04</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo05</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo06</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo07</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo08</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo09</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo10</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo11</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo12</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo13</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo14</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo15</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo16</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo17</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo18</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo19</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo20</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo21</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo22</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo23</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo24</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo25</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo26</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo27</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo28</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo29</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+            <div class="big-logo-item" style="text-align: center; padding: 30px; background: var(--bg-light); border-radius: 8px; transition: transform 0.3s ease; border: 2px solid var(--primary-color); min-height: 120px;">
+                <div style="font-weight: bold; color: var(--text-white); font-size: 18px;">大Logo30</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">金牌赞助商</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片模板模块 -->
+    <div class="image-templates-section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 style="font-size: clamp(20px, 4vw, 24px); margin: 20px 0; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">🖼️ 图片模板</h2>
+        
+        <div class="image-templates-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://cdn.wzw.cn/ccms-file/2023-06-09-16-25-14/6sqtttcnx2.jpg" alt="图片模板1" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板1</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://ts4.tc.mm.bing.net/th/id/OIP-C.-1LtKxguWfx9HJVvB-KJJgHaKe?rs=1&pid=ImgDetMain&o=7&rm=3" alt="茶海虾王品牌发展规划" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">茶海虾王品牌发展规划</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">品牌发展规划图片</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://img.tukuppt.com/preview/word/10847052-64f49bd7e9a321693752279.jpg-0.jpg!/fw/780/quality/90/unsharp/true/compress/true" alt="图片模板3" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板3</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://img.tukuppt.com/preview/word/13624185-65089aadb8d801695062701.jpg-0.jpg!/fw/780/quality/90/unsharp/true/compress/true" alt="图片模板4" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板4</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://wh5.nutsbp.com/whimg/03/ca/7c/08/96/4a/44/ce/42/7d/b7/ce/a4/41/7f/e6.jpg" alt="图片模板5" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板5</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://wh2.nutsbp.com/whimg/f5/f4/d9/b0/a6/be/ff/6d/92/c9/e1/fe/f6/c0/49/ac.jpg" alt="图片模板6" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板6</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://wh6.nutsbp.com/whimg/1b/44/82/dd/35/88/67/d2/ed/82/b2/c3/06/00/6b/6d.jpg" alt="图片模板7" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板7</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+            
+            <div class="image-template-item" style="background: var(--bg-light); border-radius: 8px; overflow: hidden; transition: transform 0.3s ease; box-shadow: var(--shadow);">
+                <img src="https://ts4.tc.mm.bing.net/th/id/OIP-C.8fS7gxXnDOSDjw_42jLBygHaE8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="图片模板8" style="width: 100%; height: 150px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <h3 style="font-size: 14px; margin: 0 0 10px; color: var(--text-white);">模板8</h3>
+                    <p style="font-size: 12px; color: var(--text-secondary); margin: 0;">适合多种场景使用</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部链接 -->
+  
+
+    <!-- 广告区域 -->
+    <div class="ads-footer-section" style="background: var(--bg-card); border-radius: 12px; padding: 30px; margin: 40px 0; box-shadow: var(--shadow);">
+        <h2 style="font-size: clamp(20px, 4vw, 24px); margin: 20px 0; color: var(--primary-color); border-left: 4px solid var(--secondary-color); padding-left: 15px;">📢 广告位合作</h2>
+        
+        <!-- 图片横幅广告 -->
+        <div class="ad" style="margin: 30px 0;">
+            <a href="https://example.com" target="_blank">
+                <img src="QR code捐赠渠道0.ico" alt="广告">
+            </a>
+        </div>
+        
+        <!-- 文字广告位 -->
+        <div class="txtguanggao">
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+            <a href="https://example.com" target="_blank" class="dh">超低价文字广告位</a>
+
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center; color: var(--text-secondary); font-size: 14px;">
+            帮助网站管理员和广告主实现网站推广、产品宣传和品牌建设。
+        </div>
+    </div>
+
+    <!-- 页脚信息 -->
+    <div class="footer-note">
+        <p>AI龙虾 © 2026 智能科技 · 创新未来</p>
+        <p>技术支持服务联系：rao5201@126.com</p>
+    </div>
+
+    <footer>
+        <p>© 2026 rao5201. Powered by GitHub Pages.</p>
+        <div style="margin-top: 20px; text-align: center; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+            <img src="https://opnnclaw.com.cn/zb_users/cache/ly_autoimg/m/MjU5.png" alt="底部图片1" style="max-width: 200px; height: auto;">
+            <img src="https://opnnclaw.com.cn/zb_users/cache/ly_autoimg/m/MTg0.png" alt="底部图片2" style="max-width: 200px; height: auto;">
+            <img src="https://opnnclaw.com.cn/zb_users/cache/ly_autoimg/m/MTkz.png" alt="底部图片3" style="max-width: 200px; height: auto;">
+            <img src="https://opnnclaw.com.cn/zb_users/cache/ly_autoimg/m/MjM1.png" alt="底部图片4" style="max-width: 200px; height: auto;">
+            <img src="https://ts1.tc.mm.bing.net/th/id/R-C.b9b56795df78763637b0b746fd1e5eff?rik=RoI%2bUaOuPYF3gw&riu=http%3a%2f%2fn.sinaimg.cn%2fsinakd20250617s%2f381%2fw1280h701%2f20250617%2f6061-d11e1bf17c3acdd487fc9b5612a67032.jpg&ehk=IcUaX7VigiLZPU%2fDg%2bjw5SX8ULAF9dd1eSgm4GYUg%2bs%3d&risl=&pid=ImgRaw&r=0" alt="底部图片5" style="max-width: 200px; height: auto;">
+        </div>
+    </footer>
+
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        $(window).scroll(function() {
+            var scrollTop = $(document).scrollTop();
+            if (scrollTop > 200) {
+                $(".fixed").fadeIn()
+            } else {
+                $(".fixed").fadeOut()
+            }
+        })
+
+        //    $("#back-to-top").click(function() { //顶部返回
+        //        $("html,body").animate({scrollTop: 0}, 600);
+        //    });
+        
+        window.onload = function() {
+            // 为进度条添加动画效果
+            const progressBars = document.querySelectorAll('.progress-bar-fill');
+            progressBars.forEach((bar, index) => {
+                setTimeout(() => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                }, index * 200);
+            });
+            
+            // 加载文章列表
+            loadArticles();
+        };
+
+        // 下载按钮点击事件
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('感谢您的关注！AI龙虾正在紧张开发中，敬请期待正式发布。\n\n如有合作意向，请联系：rao5201@126.com');
+            });
+        });
+
+        // 全能文件预览功能
+        async function loadArticles() {
+            const list = document.getElementById("posts-list");
+            const contentBox = document.getElementById("article-content");
+            const articleFiles = [
+                "01.OpenClaw介绍.txt","02.第一步入门指南.txt","03.第一步CLI 新手引导.txt",
+                "04.第一步新手引导.txt","教程.docx","案例.pdf","演示.jpg","演示.png",
+                "视频.mp4","音频.mp3","资料.zip","资料.rar"
+            ];
+
+            for (let file of articleFiles) {
+                let card = document.createElement("div");
+                card.className = "post-card public";
+                card.innerHTML = `
+                    <div class="post-date">支持在线预览</div>
+                    <div class="post-title">📄 ${file}</div>
+                    <div class="post-content">点击打开</div>
+                `;
+                card.onclick = () => openFile(file);
+                list.appendChild(card);
+            }
+        }
+
+        async function openFile(file) {
+            const box = document.getElementById("article-content");
+            const url = `articles/${file}`;
+            box.style.display = "block";
+            box.innerHTML = "加载中...";
+
+            try {
+                if (file.match(/\.(txt|md|json|js|css|html|xml|csv)$/)) {
+                    let r = await fetch(url);
+                    box.innerText = await r.text();
+                } else if (file.endsWith(".docx")) {
+                    PizZipUtils.getBinaryContent(url, (err, content) => {
+                        const zip = new PizZip(content);
+                        const doc = new docxtemplater().loadZip(zip);
+                        box.innerText = doc.getFullText();
+                    });
+                } else if (file.match(/\.(jpg|jpeg|png|gif|bmp|webp)$/)) {
+                    box.innerHTML = `<img src="${url}" alt="${file}">`;
+                } else if (file.match(/\.(mp4|mov|webm|ogg)$/)) {
+                    box.innerHTML = `<video controls src="${url}"></video>`;
+                } else if (file.match(/\.(mp3|wav|ogg|m4a)$/)) {
+                    box.innerHTML = `<audio controls src="${url}"></audio>`;
+                } else if (file.endsWith(".pdf")) {
+                    box.innerHTML = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(window.location.origin + url)}&embedded=true"></iframe>`;
+                } else {
+                    box.innerHTML = `
+                        <p>文件：${file}</p>
+                        <p>格式不支持在线预览，可直接下载</p>
+                        <a class="download-link" href="${url}" download="${file}">📥 点击下载文件</a>
+                    `;
+                }
+            } catch (e) {
+                box.innerText = "加载失败：" + e.message;
+            }
+            box.scrollIntoView({ behavior: "smooth" });
+        }
+
+        // 解密信息
+        function decryptSecret() {
+            const key = document.getElementById('decrypt-key').value.trim();
+            if (key === 'rao5201-2026') {
+                document.getElementById('bank-account').textContent = '622848-0089-3046-69172';
+                document.getElementById('bank-name').textContent = '中国农业银行';
+                document.getElementById('bank-branch').textContent = '广州林安物流园支行';
+                document.getElementById('bank-username').textContent = '饶思义';
+                alert('解密成功！');
+            } else {
+                alert('密钥错误，请联系站长获取正确密钥');
+            }
+        }
+    </script>
+</body>
+</html>
